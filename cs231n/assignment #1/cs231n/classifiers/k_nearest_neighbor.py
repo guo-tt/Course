@@ -23,6 +23,8 @@ class KNearestNeighbor(object):
         """
         self.X_train = X
         self.y_train = y
+        
+        
 
     def predict(self, X, k=1, num_loops=0):
         """
@@ -76,9 +78,13 @@ class KNearestNeighbor(object):
                 # not use a loop over dimension, nor use np.linalg.norm().          #
                 #####################################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-                pass
-
+#                 d = np.zeros(X.shape[1])
+#                 for k in range(0,X.shape[1]):
+#                     d[k] = np.square(X[i,p]-X_train[j,p])
+#                 dist[i,j] = np.sqrt(np.sum(d))
+                
+                dist[i,j] = np.sqrt(np.sum(np.square(X[i] - self.X_train[j])))
+                
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
 
@@ -100,8 +106,7 @@ class KNearestNeighbor(object):
             # Do not use np.linalg.norm().                                        #
             #######################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-            pass
+            dists[i] = np.sqrt(np.sum(np.square(self.X_train - X[i]), axis=1))
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
@@ -130,8 +135,7 @@ class KNearestNeighbor(object):
         #       and two broadcast sums.                                         #
         #########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return dists
