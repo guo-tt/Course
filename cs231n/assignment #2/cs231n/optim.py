@@ -39,6 +39,8 @@ def sgd(w, dw, config=None):
     """
     if config is None: config = {}
     config.setdefault('learning_rate', 1e-2)
+    
+    w = np.reshape(w, dw.shape)
 
     w -= config['learning_rate'] * dw
     return w, config
@@ -66,8 +68,11 @@ def sgd_momentum(w, dw, config=None):
     # the next_w variable. You should also use and update the velocity v.     #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-    pass
+    learning_rate = config.setdefault('learning_rate', 1e-2)
+    mu = config.setdefault('momentum',0.9)
+    
+    v = mu * v - learning_rate * dw
+    next_w = w + v
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -104,8 +109,15 @@ def rmsprop(w, dw, config=None):
     # config['cache'].                                                        #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    learning_rate = config.setdefault('learning_rate', 1e-2)
+    decay_rate = config.setdefault('decay_rate', 0.99)
+    eps = config.setdefault('epsilon', 1e-8)
+    cache = config.setdefault('cache', np.zeros_like(w))
+    
+    cache = decay_rate * cache + (1 - decay_rate) * dw ** 2
+    next_w = w - learning_rate * dw / (np.sqrt(cache) + eps)
 
-    pass
+    config['cache'] = cache
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -148,8 +160,24 @@ def adam(w, dw, config=None):
     # using it in any calculations.                                           #
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    learning_rate = config.setdefault('learning_rate', 1e-3)
+    beta1 = config.setdefault('beta1', 0.9)
+    beta2 = config.setdefault('beta2', 0.999)
+    eps = config.setdefault('epsilon', 1e-8)
+    m = config.setdefault('m', np.zeros_like(w))
+    v = config.setdefault('v', np.zeros_like(w))
+    t = config.setdefault('t', 1)
+    
+    t += 1
+    m = beta1 * m + (1 - beta1) * dw
+    mt = m / (1 - beta1 ** t)
+    v = beta2 * v + (1 - beta2) * (dw ** 2)
+    vt = v / (1 - beta2 ** t)
+    next_w = w - learning_rate * mt / (np.sqrt(vt) + eps)
 
-    pass
+    config['t'] = t
+    config['m'] = m
+    config['v'] = v
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################

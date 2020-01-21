@@ -177,6 +177,7 @@ class Solver(object):
         batch_mask = np.random.choice(num_train, self.batch_size)
         X_batch = self.X_train[batch_mask]
         y_batch = self.y_train[batch_mask]
+        
 
         # Compute loss and gradient
         loss, grads = self.model.loss(X_batch, y_batch)
@@ -261,6 +262,7 @@ class Solver(object):
         num_train = self.X_train.shape[0]
         iterations_per_epoch = max(num_train // self.batch_size, 1)
         num_iterations = self.num_epochs * iterations_per_epoch
+        
 
         for t in range(num_iterations):
             self._step()
